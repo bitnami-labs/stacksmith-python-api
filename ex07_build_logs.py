@@ -11,7 +11,7 @@ import stacksmith
 
 def get_build_logs_url(build):
     jobs = [job for job in build['stackbuilderInfo']['jobs']
-            if job['type'] == 'imagebuilder']
+            if job.get('type') == 'imagebuilder']
     job_name = jobs[0]['name']
     return urljoin(stacksmith.url,
                    'logreader/getlogs/{job_name}'.format(job_name=job_name))
