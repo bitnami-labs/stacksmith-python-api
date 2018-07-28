@@ -3,12 +3,10 @@ version: '2'
 services:
   stacksmithapi:
     tty: true
-    image: 'stacksmith-api'
-    volumes:
-      - .:/host
+    image: 'stacksmith-py'
     ports: 
       - 8551:8551
     environment:
-      - STACKSMITH_API_URL='https://beta.stacksmith.bitnami.com/api/v1/'
-      - STACKSMITH_NAMESPACE='rick@bitnami.com'
+      - STACKSMITH_API_URL='https://stacksmith.bitnami.com/api/v1/'
+      - STACKSMITH_NAMESPACE='beta-features'
       - STACKSMITH_AUTH_MACAROON=''

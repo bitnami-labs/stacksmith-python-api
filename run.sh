@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly STACKSMITH_API_URL=${STACKSMITH_API_URL:-'https://beta.stacksmith.bitnami.com/api/v1/'}
+readonly STACKSMITH_API_URL=${STACKSMITH_API_URL:-'https://stacksmith.bitnami.com/api/v1/'}
 readonly STACKSMITH_AUTH_MACAROON=${STACKSMITH_AUTH_MACAROON:-''}
 readonly STACKSMITH_NAMESPACE=${STACKSMITH_NAMESPACE:?Please provide the STACKSMITH_NAMESPACE environment variable.}
 readonly port=8551
