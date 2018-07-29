@@ -14,12 +14,11 @@ def get_downloadable_artifacts(namespace, token, build):
         'ns/{ns}/builds/{build}/downloadUrl/{artifact}'.format(
             ns=namespace,
             build=build,
-            artifact='template_s3_uri'
+            artifact='template_https_url'
         )
     )
     download = requests.get(
         download_endpoint, headers={'authorization': token})
-
     assert download.status_code == 200, (
         'Could not get artifacts for build "{build}": {reason}'.format(
             build=build, reason=download.json().get('error')))
