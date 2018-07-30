@@ -9,7 +9,7 @@ import stacksmith
 
 def presign_url(namespace, bearer_token, filename, account_id):
     endpoint = urljoin(
-        stacksmith.url, 'ns/{namespace}/s3sign'.format(namespace=namespace))
+        stacksmith.url, 'ns/{namespace}/presign'.format(namespace=namespace))
     data = {'objectName': os.path.basename(filename), 'cloudAccountID': account_id}
     response = requests.post(
         endpoint, headers={'Authorization': bearer_token}, json=data)

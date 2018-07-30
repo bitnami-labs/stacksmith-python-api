@@ -12,12 +12,12 @@ import stacksmith
 def upload_application_files(namespace, token, files):
     app_files = []
     for f in files:
-        s3_info = presign_url(namespace, token, f)
+        blob_info = presign_url(namespace, token, f)
 
-        if upload_file_to_presigned_url(s3_info['signedUrl'], f):
+        if upload_file_to_presigned_url(blob_info['signedUrl'], f):
             app_files.append({
                 'filename': os.path.basename(f),
-                's3Path': s3_info['s3Uri']
+                'blobPath': blob_info['blobUri']
             })
         else:
             print('Warning: Failed to upload file "{}"'.format(f))
@@ -28,11 +28,11 @@ def upload_application_files(namespace, token, files):
 def upload_application_scripts(namespace, token, scripts):
     app_scripts = {}
     for script_type, script_file in scripts.items():
-        s3_info = presign_url(namespace, token, script_file)
+        blob_info = presign_url(namespace, token, script_file)
 
-        if upload_file_to_presigned_url(s3_info['signedUrl'], script_file):
+        if upload_file_to_presigned_url(blob_info['signedUrl'], script_file):
             app_scripts[script_type] = {
-                's3Path': s3_info['s3Uri']
+                'blobPath': blob_info['blobUri']
             }
 
     return app_scripts

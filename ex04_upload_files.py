@@ -25,11 +25,11 @@ def main():
     bearer_token = bearer_token_for_namespace(namespace)
     filename = 'files/sample.war'
 
-    s3_info = presign_url(namespace, bearer_token, filename)
-    if upload_file_to_presigned_url(s3_info['signedUrl'], filename):
-        print('File "{filename}" uploaded to "{s3_uri}"'.format(
+    blob_info = presign_url(namespace, bearer_token, filename)
+    if upload_file_to_presigned_url(blob_info['signedUrl'], filename):
+        print('File "{filename}" uploaded to "{blob_uri}"'.format(
             filename=filename,
-            s3_uri=s3_info['s3Uri']
+            blob_uri=blob_info['blobUri']
         ))
 
 
