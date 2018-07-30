@@ -1,5 +1,6 @@
 from urllib.parse import urljoin
 import os
+import sys
 
 import requests
 
@@ -9,15 +10,15 @@ from ex04_upload_files import upload_file_to_presigned_url
 import stacksmith
 
 
-def upload_application_files(namespace, token, files):
+def upload_application_files(namespace, token, files, account_id):
     app_files = []
     for f in files:
-        blob_info = presign_url(namespace, token, f)
+        blob_info = presign_url(namespace, token, f, account_id)
 
         if upload_file_to_presigned_url(blob_info['signedUrl'], f):
             app_files.append({
                 'filename': os.path.basename(f),
-                'blobPath': blob_info['blobUri']
+                'storageURI': blob_info['s3Uri']
             })
         else:
             print('Warning: Failed to upload file "{}"'.format(f))
@@ -25,14 +26,14 @@ def upload_application_files(namespace, token, files):
     return app_files
 
 
-def upload_application_scripts(namespace, token, scripts):
+def upload_application_scripts(namespace, token, scripts, account_id):
     app_scripts = {}
     for script_type, script_file in scripts.items():
-        blob_info = presign_url(namespace, token, script_file)
+        blob_info = presign_url(namespace, token, script_file, account_id)
 
         if upload_file_to_presigned_url(blob_info['signedUrl'], script_file):
             app_scripts[script_type] = {
-                'blobPath': blob_info['blobUri']
+                'storageURI': blob_info['s3Uri']
             }
 
     return app_scripts
@@ -58,7 +59,6 @@ def create_application(
         'appFiles': app_files,
         'appScripts': app_scripts
     }
-
     new_app_endpoint = urljoin(
         stacksmith.url, 'ns/{namespace}/apps'.format(namespace=namespace))
     response = requests.post(
@@ -71,7 +71,7 @@ def create_application(
     return response.json()
 
 
-def main():
+def main(args):
     """
     Use the Stacksmith API to create an application.
     Within this sample, a Bearer token will be generated,
@@ -89,14 +89,14 @@ def main():
     namespace = stacksmith.namespace
     bearer_token = bearer_token_for_namespace(namespace)
     files = ['files/sample.war']
-    app_files = upload_application_files(namespace, bearer_token, files)
+    app_files = upload_application_files(namespace, bearer_token, files, account_id)
 
 
     scripts = {
         'build': 'files/build.sh',
         'entrypoint': 'files/entrypoint.sh'
     }
-    app_scripts = upload_application_scripts(namespace, bearer_token, scripts)
+    app_scripts = upload_application_scripts(namespace, bearer_token, scripts, account_id)
 
     new_app = create_application(
         account_id,
@@ -104,8 +104,8 @@ def main():
         bearer_token,
         'test-app',
         '1.0',
-        'tomcat',
-        ['docker'],
+        'TOMCAT',
+        ['azure'],
         app_files,
         app_scripts)
 
