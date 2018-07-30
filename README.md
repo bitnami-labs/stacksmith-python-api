@@ -59,5 +59,4 @@ started.
 * ex13_delete_app.py: Deleting an application.
 * ex14_download_artifacts.py: Downloading the artifacts from a build.
 * ex15_system_packages.py: Retrieving the list of system packages installed as part of a build.
-* ex16_system_packages_preview.py: Retrieving the preview list of system packages which will be
-installed as part of rebuilding an build.
+* ex16_get_cloud_accounts.py: Retrieve the Cloud Account IDs for a namespace
