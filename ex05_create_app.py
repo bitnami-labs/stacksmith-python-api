@@ -39,6 +39,7 @@ def upload_application_scripts(namespace, token, scripts):
 
 
 def create_application(
+    cloudAccountID,
     namespace,
     token,
     app_name,
@@ -49,6 +50,7 @@ def create_application(
     app_scripts
 ):
     app_data = {
+        'cloudAccountID': cloudAccountID,
         'appName': app_name,
         'appVersion': app_version,
         'template': template,
@@ -76,10 +78,19 @@ def main():
     the necessary files will be uploaded to S3,
     and the build will be started.
     """
+
+
+    if len(args) < 2:
+        print('Must specify a cloud account ID. Use ex16_get_cloud_accounts.py to retrieve it.')
+        sys.exit(1)
+
+    account_id = args[1]
+
     namespace = stacksmith.namespace
     bearer_token = bearer_token_for_namespace(namespace)
     files = ['files/sample.war']
     app_files = upload_application_files(namespace, bearer_token, files)
+
 
     scripts = {
         'build': 'files/build.sh',
@@ -88,11 +99,18 @@ def main():
     app_scripts = upload_application_scripts(namespace, bearer_token, scripts)
 
     new_app = create_application(
-        namespace, bearer_token,
-        'test-app', '1.0', 'tomcat', ['docker'], app_files, app_scripts)
+        account_id,
+        namespace,
+        bearer_token,
+        'test-app',
+        '1.0',
+        'tomcat',
+        ['docker'],
+        app_files,
+        app_scripts)
 
     print(new_app)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)

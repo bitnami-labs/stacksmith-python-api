@@ -66,11 +66,11 @@ def main(args):
     """
 
     if len(args) < 3:
-        print('Must specify an application ID and cloud account ID')
+        print('Must specify a cloud account ID. Use ex16_get_cloud_accounts.py to retrieve it.')
         sys.exit(1)
 
     app_id = args[1]
-    cloudAccountID = args[2]
+    account_id = args[2]
     print('Editing application "{app}"'.format(app=app_id))
 
     namespace = stacksmith.namespace
@@ -78,7 +78,7 @@ def main(args):
     latest_revision = get_latest_revision(namespace, bearer_token, app_id)
     edited_app = edit_application(
         namespace,
-        cloudAccountID,
+        account_id,
         bearer_token,
         app_id,
         '2.0',
