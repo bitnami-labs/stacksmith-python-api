@@ -10,6 +10,7 @@ import stacksmith
 
 def edit_application(
     namespace,
+    cloudAccountID,
     token,
     app_id,
     app_version,
@@ -19,6 +20,7 @@ def edit_application(
     app_scripts
 ):
     app_data = {
+        'cloudAccountID': cloudAccountID,
         'appVersion': app_version,
         'template': template,
         'targets': targets,
@@ -63,11 +65,12 @@ def main(args):
     will be fetched, and a new revision will be submitted with a new version.
     """
 
-    if len(args) < 2:
-        print('Must specify an application ID')
+    if len(args) < 3:
+        print('Must specify an application ID and cloud account ID')
         sys.exit(1)
 
     app_id = args[1]
+    cloudAccountID = args[2]
     print('Editing application "{app}"'.format(app=app_id))
 
     namespace = stacksmith.namespace
@@ -75,13 +78,14 @@ def main(args):
     latest_revision = get_latest_revision(namespace, bearer_token, app_id)
     edited_app = edit_application(
         namespace,
+        cloudAccountID,
         bearer_token,
         app_id,
         '2.0',
         latest_revision['template'],
         [t['name'] for t in latest_revision['targets']],
         latest_revision['appFiles'],
-        latest_revision['appScripts'])
+        latest_revision.get('appScripts'))
     print(edited_app)
 
 
